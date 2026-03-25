@@ -4,35 +4,57 @@ name: Deploy GitHub Pages
 # Run on every push to the default branch (main)
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
-# Permissions required for the built‑in Pages actions
+# These permissions are required for the built‑in Pages actions
 permissions:
-  contents: read          # to fetch the repo
-  pages: write           # to deploy
-  id-token: write        # for authentication with the pages service
+  # Read repo contents so the checkout step can pull the code
+  contents: read
+  # Write the built site to GitHub Pages
+  pages: write
+  # Create the OIDC token the deploy action uses
+  id-token: write
 
 jobs:
+  # ------------------------------------------------------------------
+  # Deploy job – the only job we need for a pure static site
+  # ------------------------------------------------------------------
   deploy:
     runs-on: ubuntu-latest
+
+    # 👇 👇 👇  THIS IS THE MISSING PART 👇 👇 👇
+    # The name must match the built‑in Pages environment.
+    # You can leave it as “github-pages”. GitHub will create the
+    # environment automatically the first time this workflow runs,
+    # or you can pre‑create it under Settings → Environments.
+    environment:
+      name: github-pages
+
     steps:
-      # 1️⃣ Checkout the repo
+      # 1️⃣ Checkout the repo (the entire source tree)
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Tell the actions that we are using GitHub Pages
-      - name: Setup Pages
+      # 2️⃣ Tell GitHub this run will publish a Pages site
+      - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # 3️⃣ Upload the *entire* repo (root contains index.html) as the artifact
+      # 3️⃣ Upload the *artifact* that will be published.
+      #    The path “.” means “the repository root”, where your
+      #    index.html lives.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Path to the folder you want to publish.
-          # '.' means the repository root – where index.html lives.
           path: .
 
-      # 4️⃣ Deploy the artifact to the user/organization site
+      # 4️⃣ Deploy the uploaded artifact to the Pages environment
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deployment               # <-- give the step an id so we can reference its output
         uses: actions/deploy-pages@v4
+
+    # ------------------------------------------------------------------
+    # Optional: expose the live URL as a job output (useful for alerts)
+    # ------------------------------------------------------------------
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+
