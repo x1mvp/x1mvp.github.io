@@ -1,0 +1,38 @@
+# .github/workflows/pages.yml
+name: Deploy GitHub Pages
+
+# Run on every push to the default branch (main)
+on:
+  push:
+    branches: [ main ]
+
+# Permissions required for the built‑in Pages actions
+permissions:
+  contents: read          # to fetch the repo
+  pages: write           # to deploy
+  id-token: write        # for authentication with the pages service
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1️⃣ Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Tell the actions that we are using GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 3️⃣ Upload the *entire* repo (root contains index.html) as the artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Path to the folder you want to publish.
+          # '.' means the repository root – where index.html lives.
+          path: .
+
+      # 4️⃣ Deploy the artifact to the user/organization site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
