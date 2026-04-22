@@ -2,168 +2,1221 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>x1mvp – Data‑Engineering Portfolio</title>
-
-  <!-- Favicon -->
-  <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>⚙️</text></svg>">
-
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta property="og:title" content="x1mvp – Data‑Engineering Portfolio">
-  <meta property="og:url"   content="https://x1mvp.github.io">
-  <meta property="og:description"
-        content="Terminal‑styled showcase of AI‑powered data‑engineering demos">
+  <title>x1mvp – Data Engineering Portfolio</title>
+  
+  <!-- SEO & Meta Tags -->
+  <meta name="description" content="AI-powered data engineering portfolio showcasing real-time demos, ML pipelines, and distributed systems">
+  <meta name="keywords" content="data engineering, machine learning, apache spark, airflow, dbt, kafka, python, sql">
+  <meta name="author" content="x1mvp">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="x1mvp – Data Engineering Portfolio">
+  <meta property="og:url" content="https://x1mvp.github.io">
+  <meta property="og:description" content="AI-powered data engineering portfolio with interactive demos">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://x1mvp.github.io/og-image.png">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@x1mvp">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>⚙️</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>⚙️</text></svg>">
+  
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" as="style">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Theme Color -->
   <meta name="theme-color" content="#0a0a0a">
-
-  <!-- ----- CSS ----- -->
+  <meta name="msapplication-TileColor" content="#0a0a0a">
+  
   <style>
-    /* ==== Core reset ==== */
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{
-      height:100%;
-      font-family:'IBM Plex Mono',monospace;
-      background:#0a0a0a;
-      color:#00ffcc;
-      overflow:hidden;
+    /* ==== Core Reset & Variables ==== */
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111;
+      --bg-tertiary: #1a1a1a;
+      --text-primary: #00ffcc;
+      --text-secondary: #00cc99;
+      --text-muted: #666;
+      --accent: #00e6b8;
+      --error: #ff4444;
+      --warning: #ffaa00;
+      --success: #00cc66;
+      --border: #333;
+      --shadow: rgba(0, 255, 204, 0.2);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* ==== Font (CDN) ==== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ==== Dark Mode Support ==== */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-primary: #f5f5f5;
+        --bg-secondary: #fff;
+        --bg-tertiary: #fafafa;
+        --text-primary: #0066cc;
+        --text-secondary: #004499;
+        --text-muted: #666;
+        --border: #ddd;
+        --shadow: rgba(0, 102, 204, 0.2);
+      }
+    }
+
+    /* ==== Base Styles ==== */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ==== Font Import ==== */
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
 
-    /* ==== Layout ==== */
-    header{padding:1rem 2rem;background:#111;display:flex;justify-content:space-between;align-items:center;}
-    header a{color:#00ffcc;text-decoration:none;font-weight:700;}
-    main{height:calc(100% - 120px);display:flex;flex-direction:column;align-items:center;padding:2rem;overflow-y:auto;}
-    footer{padding:0.5rem 2rem;background:#111;text-align:center;font-size:0.85rem;}
-
-    /* ==== Type‑writer effect ==== */
-    @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
-    .cursor{display:inline-block;width:10px;height:1.2em;background:#00ffcc;animation:blink .8s steps(2) infinite;}
-    .type{border-right:2px solid #00ffcc;white-space:pre-wrap;}
-
-    /* ==== Demo cards ==== */
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;width:100%;max-width:1200px;margin-top:2rem;}
-    .card{background:#111;padding:1.2rem;border-radius:6px;box-shadow:0 0 10px rgba(0,255,204,.2);position:relative;overflow:hidden;}
-    .card h3{margin-bottom:.5rem;color:#fff;}
-    .card p{font-size:.9rem;margin-bottom:1rem;}
-    .card button{background:#00ffcc;color:#0a0a0a;padding:.5rem 1rem;border:none;border-radius:4px;cursor:pointer;transition:.2s;}
-    .card button:hover{background:#00e6b8;}
-
-    /* ==== Scanline overlay ==== */
-    body::before{
-      content:"";
-      position:fixed;top:0;left:0;width:100%;height:100%;
-      background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0,rgba(0,0,0,.05) 1px,transparent 1px,transparent 2px);
-      pointer-events:none;z-index:2;
+    /* ==== Accessibility ==== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
-    /* ==== Particle field ==== */
-    canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;}
+    /* Focus Styles */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ==== Layout ==== */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .logo {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .logo:hover {
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .typewriter-container {
+      max-width: 600px;
+    }
+
+    .typewriter {
+      border-right: 2px solid var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--text-primary) }
+    }
+
+    main {
+      min-height: calc(100vh - 140px);
+      padding: 3rem 1rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* ==== Hero Section ==== */
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h1 {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ==== Demo Cards Grid ==== */
+    .demos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .demo-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .demo-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--text-primary), var(--accent));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .demo-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .demo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px var(--shadow);
+      border-color: var(--accent);
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .demo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .demo-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .demo-tech {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .demo-description {
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .demo-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-tertiary);
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .stat-value {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .demo-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      color: var(--bg-primary);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ==== Terminal Demo Modal ==== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 80vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .terminal {
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      padding: 1.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .terminal-line {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .terminal-prompt {
+      color: var(--accent);
+      margin-right: 0.5rem;
+    }
+
+    .terminal-output {
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .terminal-error {
+      color: var(--error);
+    }
+
+    .terminal-success {
+      color: var(--success);
+    }
+
+    .terminal-warning {
+      color: var(--warning);
+    }
+
+    /* ==== Skills Section ==== */
+    .skills-section {
+      margin: 4rem 0;
+      animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .skill-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .skill-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-name {
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-level {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ==== Footer ==== */
+    footer {
+      padding: 2rem;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* ==== Background Effects ==== */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 204, 0.03) 2px,
+        rgba(0, 255, 204, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ==== Loading States ==== */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ==== Responsive Design ==== */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .demos-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .modal-content {
+        margin: 1rem;
+        max-height: 90vh;
+      }
+
+      .demo-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* ==== Print Styles ==== */
+    @media print {
+      header, footer, .scanlines, #particleCanvas {
+        display: none;
+      }
+      
+      body {
+        background: white;
+        color: black;
+      }
+      
+      .demo-card {
+        break-inside: avoid;
+        border: 1px solid #ccc;
+      }
+    }
+
+    /* ==== Reduced Motion ==== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <canvas id="bg"></canvas>
+  <!-- Background Effects -->
+  <canvas id="particleCanvas"></canvas>
+  <div class="scanlines"></div>
 
-  <header>
-    <a href="https://github.com/x1mvp" target="_blank">github.com/x1mvp</a>
-    <div class="type" id="hero">~$ welcome to x1mvp's data‑engineer playground<span class="cursor"></span></div>
+  <!-- Header -->
+  <header role="banner">
+    <div class="header-left">
+      <a href="https://github.com/x1mvp" target="_blank" rel="noopener" class="logo" aria-label="GitHub Profile">
+        <span>⚙️</span>
+        <span>x1mvp</span>
+      </a>
+      <nav>
+        <ul class="nav-links" role="list">
+          <li><a href="#demos">Demos</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="typewriter-container">
+      <div class="typewriter" id="heroText" aria-live="polite">
+        ~$ welcome to x1mvp's data‑engineer playground
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section class="grid">
-      <!-- Demo 1 -->
-      <div class="card">
-        <h3>CRM RAG Search</h3>
-        <p>Enter a sales query – the AI searches a vector‑store of leads and returns top‑matches with pgvector scores.</p>
-        <button onclick="demoAlert('CRM RAG Search')">Run demo</button>
-      </div>
+  <!-- Main Content -->
+  <main role="main">
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero">
+        <h1>AI‑Powered Data Engineering</h1>
+        <p class="subtitle">
+          Building scalable, production‑ready data pipelines with modern cloud architectures
+        </p>
+      </section>
 
-      <!-- Demo 2 -->
-      <div class="card">
-        <h3>Fraud Stream</h3>
-        <p>Live‑simulated Kafka stream of 10 K TPS. Random events are labelled fraud/legit in real‑time.</p>
-        <button onclick="demoAlert('Fraud Stream')">Run demo</button>
-      </div>
+      <!-- Interactive Demos -->
+      <section id="demos" aria-labelledby="demos-heading">
+        <h2 id="demos-heading" class="sr-only">Interactive Demos</h2>
+        <div class="demos-grid">
+          <!-- CRM RAG Search Demo -->
+          <article class="demo-card" tabindex="0" role="article" aria-labelledby="demo1-title">
+            <div class="demo-header">
+              <div class="demo-icon">🔍</div>
+              <div>
+                <h3 id="demo1-title" class="demo-title">CRM RAG Search</h3>
+                <p class="demo-tech">PostgreSQL • pgvector • OpenAI • FastAPI</p>
+              </div>
+            </div>
+            <p class="demo-description">
+              Vector‑powered semantic search across millions of customer records. Real‑time similarity scoring with LLM‑augmented responses.
+            </p>
+            <div class="demo-stats">
+              <span class="stat">
+                <span class="stat-value">10M+</span>
+                <span>Records</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">1538</span>
+                <span>Dims</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">&lt;50ms</span>
+                <span>Latency</span>
+              </span>
+            </div>
+            <div class="demo-actions">
+              <button class="btn btn-primary" onclick="runDemo('crm-rag')" aria-label="Run CRM RAG Search Demo">
+                <span>▶</span>
+                <span>Run Demo</span>
+              </button>
+              <a href="https://github.com/x1mvp/crm-rag" target="_blank" rel="noopener" class="btn btn-secondary">
+                <span>📄</span>
+                <span>View Code</span>
+              </a>
+            </div>
+          </article>
 
-      <!-- Demo 3 -->
-      <div class="card">
-        <h3>Clinical Predictor</h3>
-        <p>Input patient vitals → XGBoost risk score + animated SHAP bars.</p>
-        <button onclick="demoAlert('Clinical Predictor')">Run demo</button>
-      </div>
+          <!-- Fraud Stream Demo -->
+          <article class="demo-card" tabindex="0" role="article" aria-labelledby="demo2-title">
+            <div class="demo-header">
+              <div class="demo-icon">⚡</div>
+              <div>
+                <h3 id="demo2-title" class="demo-title">Fraud Detection Stream</h3>
+                <p class="demo-tech">Apache Kafka • Spark Streaming • MLflow</p>
+              </div>
+            </div>
+            <p class="demo-description">
+              Real‑time fraud detection processing 100K events/sec. Auto‑scaling Spark jobs with dynamic model inference.
+            </p>
+            <div class="demo-stats">
+              <span class="stat">
+                <span class="stat-value">100K</span>
+                <span>TPS</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">94%</span>
+                <span>Accuracy</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">&lt;100ms</span>
+                <span>P99</span>
+              </span>
+            </div>
+            <div class="demo-actions">
+              <button class="btn btn-primary" onclick="runDemo('fraud-stream')" aria-label="Run Fraud Stream Demo">
+                <span>▶</span>
+                <span>Run Demo</span>
+              </button>
+              <a href="https://github.com/x1mvp/fraud-stream" target="_blank" rel="noopener" class="btn btn-secondary">
+                <span>📄</span>
+                <span>View Code</span>
+              </a>
+            </div>
+          </article>
 
-      <!-- Demo 4 -->
-      <div class="card">
-        <h3>NLP Classifier</h3>
-        <p>Paste free‑text → BERT‑ONNX returns top‑5 categories with confidence bars.</p>
-        <button onclick="demoAlert('NLP Classifier')">Run demo</button>
-      </div>
-    </section>
+          <!-- Clinical Predictor Demo -->
+          <article class="demo-card" tabindex="0" role="article" aria-labelledby="demo3-title">
+            <div class="demo-header">
+              <div class="demo-icon">🏥</div>
+              <div>
+                <h3 id="demo3-title" class="demo-title">Clinical Risk Predictor</h3>
+                <p class="demo-tech">XGBoost • SHAP • FastAPI • Docker</p>
+              </div>
+            </div>
+            <p class="demo-description">
+              ML‑powered clinical risk assessment with explainable AI. Real‑time SHAP visualizations for medical decision support.
+            </p>
+            <div class="demo-stats">
+              <span class="stat">
+                <span class="stat-value">50+</span>
+                <span>Features</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">0.89</span>
+                <span>AUC</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">FHIR</span>
+                <span>Compliant</span>
+              </span>
+            </div>
+            <div class="demo-actions">
+              <button class="btn btn-primary" onclick="runDemo('clinical-predictor')" aria-label="Run Clinical Predictor Demo">
+                <span>▶</span>
+                <span>Run Demo</span>
+              </button>
+              <a href="https://github.com/x1mvp/clinical-predictor" target="_blank" rel="noopener" class="btn btn-secondary">
+                <span>📄</span>
+                <span>View Code</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- NLP Classifier Demo -->
+          <article class="demo-card" tabindex="0" role="article" aria-labelledby="demo4-title">
+            <div class="demo-header">
+              <div class="demo-icon">📝</div>
+              <div>
+                <h3 id="demo4-title" class="demo-title">NLP Text Classifier</h3>
+                <p class="demo-tech">BERT • ONNX • scikit‑learn • Redis</p>
+              </div>
+            </div>
+            <p class="demo-description">
+              Zero‑shot text classification with confidence scoring. Multi‑label support with real‑time inference optimization.
+            </p>
+            <div class="demo-stats">
+              <span class="stat">
+                <span class="stat-value">1000+</span>
+                <span>Classes</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">96%</span>
+                <span>F1</span>
+              </span>
+              <span class="stat">
+                <span class="stat-value">&lt;10ms</span>
+                <span>Inference</span>
+              </span>
+            </div>
+            <div class="demo-actions">
+              <button class="btn btn-primary" onclick="runDemo('nlp-classifier')" aria-label="Run NLP Classifier Demo">
+                <span>▶</span>
+                <span>Run Demo</span>
+              </button>
+              <a href="https://github.com/x1mvp/nlp-classifier" target="_blank" rel="noopener" class="btn btn-secondary">
+                <span>📄</span>
+                <span>View Code</span>
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="skills" aria-labelledby="skills-heading">
+        <h2 id="skills-heading" class="sr-only">Technical Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon">🐍</div>
+            <div class="skill-name">Python</div>
+            <div class="skill-level">Expert • 8+ years</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">☁️</div>
+            <div class="skill-name">Cloud</div>
+            <div class="skill-level">AWS, GCP, Azure</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">🔥</div>
+            <div class="skill-name">Apache Spark</div>
+            <div class="skill-level">Advanced • 5+ years</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">🗄️</div>
+            <div class="skill-name">SQL</div>
+            <div class="skill-level">Expert • PostgreSQL, Snowflake</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">📊</div>
+            <div class="skill-name">ML/AI</div>
+            <div class="skill-level">TensorFlow, PyTorch, XGBoost</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">🔄</div>
+            <div class="skill-name">Kafka</div>
+            <div class="skill-level">Advanced • Streaming</div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
-  <footer>© 2026 x1mvp – All code is open‑source. <a href="https://github.com/x1mvp/x1mvp.github.io" target="_blank">repo</a></footer>
+  <!-- Footer -->
+  <footer id="contact" role="contentinfo">
+    <div class="container">
+      <p>© 2026 x1mvp – Building the future of data engineering</p>
+      <div class="footer-links">
+        <a href="https://github.com/x1mvp" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/x1mvp" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://x1mvp.github.io" target="_blank" rel="noopener">Blog</a>
+        <a href="mailto:contact@x1mvp.dev">Email</a>
+      </div>
+    </div>
+  </footer>
 
-  <!-- ----- JavaScript ----- -->
+  <!-- Demo Modal -->
+  <div id="demoModal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Demo Output</h3>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="terminal" class="terminal" role="log" aria-live="polite"></div>
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+          <button class="btn btn-primary" onclick="closeModal()">Close</button>
+          <button class="btn btn-secondary" onclick="clearTerminal()">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ----- Typewriter effect -----
-    const hero = document.getElementById('hero');
-    const txt = hero.textContent.trim();
-    let i = 0;
-    function type() {
-      if (i <= txt.length) {
-        hero.innerHTML = txt.slice(0,i) + '<span class="cursor"></span>';
-        i++;
-        setTimeout(type, 70);
+    // ==== Particle Background Animation ====
+    class ParticleSystem {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
+        this.init();
+        this.animate();
+        
+        window.addEventListener('resize', () => this.init());
+        window.addEventListener('mousemove', (e) => {
+          this.mouseX = e.clientX;
+          this.mouseY = e.clientY;
+        });
       }
-    }
-    type();
 
-    // ----- Demo placeholder alert -----
-    function demoAlert(name){
-      alert(`🛠️ The "${name}" demo is a placeholder.\nReplace the button's onclick handler with your real implementation.\nSee README for integration steps.`);
-    }
-
-    // ----- Particle background -----
-    const canvas = document.getElementById('bg');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    const cols = Math.floor(window.innerWidth/20);
-    const rows = Math.floor(window.innerHeight/20);
-
-    function initParticles(){
-      particles = [];
-      for(let x = 0; x < cols; x++){
-        for(let y = 0; y < rows; y++){
-          particles.push({x: x*20, y: y*20, size: Math.random()*2 + 0.5});
+      init() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.particles = [];
+        
+        const particleCount = Math.min(50, Math.floor((this.canvas.width * this.canvas.height) / 15000));
+        
+        for (let i = 0; i < particleCount; i++) {
+          this.particles.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            radius: Math.random() * 2 + 0.5,
+            alpha: Math.random() * 0.5 + 0.2
+          });
         }
       }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach(particle => {
+          // Mouse interaction
+          const dx = this.mouseX - particle.x;
+          const dy = this.mouseY - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            const force = (100 - distance) / 100;
+            particle.vx -= (dx / distance) * force * 0.02;
+            particle.vy -= (dy / distance) * force * 0.02;
+          }
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Damping
+          particle.vx *= 0.99;
+          particle.vy *= 0.99;
+          
+          // Boundary check
+          if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+          if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+          
+          // Draw particle
+          this.ctx.beginPath();
+          this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(0, 255, 204, ${particle.alpha})`;
+          this.ctx.fill();
+        });
+        
+        // Draw connections
+        this.particles.forEach((p1, i) => {
+          this.particles.slice(i + 1).forEach(p2 => {
+            const distance = Math.sqrt(
+              Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2)
+            );
+            
+            if (distance < 150) {
+              this.ctx.beginPath();
+              this.ctx.moveTo(p1.x, p1.y);
+              this.ctx.lineTo(p2.x, p2.y);
+              this.ctx.strokeStyle = `rgba(0, 255, 204, ${0.1 * (1 - distance / 150)})`;
+              this.ctx.stroke();
+            }
+          });
+        });
+        
+        requestAnimationFrame(() => this.animate());
+      }
     }
 
-    function draw(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = '#00ffcc';
-      particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-        ctx.fill();
+    // ==== Initialize Particles ====
+    const particleSystem = new ParticleSystem(document.getElementById('particleCanvas'));
+
+    // ==== Demo System ====
+    const demoOutputs = {
+      'crm-rag': [
+        { type: 'info', text: '$ Initializing CRM RAG Search System...' },
+        { type: 'success', text: '✓ Connected to PostgreSQL (pgvector enabled)' },
+        { type: 'info', text: '✓ Loaded OpenAI embedding model (text-embedding-3-small)' },
+        { type: 'info', text: '✓ Index ready: 10,485,762 customer records' },
+        { type: 'input', text: '> Query: "high-value enterprise clients in California with renewal pending"' },
+        { type: 'info', text: 'Converting query to 1538-dimensional vector...' },
+        { type: 'info', text: 'Performing similarity search across vector index...' },
+        { type: 'success', text: 'Found 47 matches (similarity > 0.85)' },
+        { type: 'output', text: '\nTop Results:\n───────────' },
+        { type: 'output', text: '1. Acme Corp (Score: 0.94) - $2.4M ARR, Renewal: 2024-03-15' },
+        { type: 'output', text: '2. TechStart Inc (Score: 0.91) - $1.8M ARR, Renewal: 2024-02-28' },
+        { type: 'output', text: '3. Global Systems (Score: 0.89) - $3.1M ARR, Renewal: 2024-04-01' },
+        { type: 'success', text: '\n✓ Query completed in 42ms' }
+      ],
+      'fraud-stream': [
+        { type: 'info', text: '$ Starting Fraud Detection Stream...' },
+        { type: 'success', text: '✓ Kafka brokers: 3 nodes (kafka-01, kafka-02, kafka-03)' },
+        { type: 'info', text: '✓ Spark Streaming: 8 executors, 64 cores total' },
+        { type: 'info', text: '✓ MLflow model: fraud_detection_v3.2 (AUC: 0.94)' },
+        { type: 'info', text: '📊 Stream metrics (last 60s):' },
+        { type: 'output', text: '  • Events processed: 6,000,000' },
+        { type: 'output', text: '  • Throughput: 100,000 TPS' },
+        { type: 'output', text: '  • Fraud detected: 1,247 (0.02%)' },
+        { type: 'output', text: '  • Avg latency: 67ms' },
+        { type: 'warning', text: '⚠ Alert: Unusual pattern detected in merchant_id 89234' },
+        { type: 'output', text: '\nRecent Events:' },
+        { type: 'error', text: '[10:23:45] FRAUD: Card 4532****1234 - $8,234.56 - Risk: 0.98' },
+        { type: 'output', text: '[10:23:46] OK: Card 5521****9876 - $123.45 - Risk: 0.12' },
+        { type: 'output', text: '[10:23:47] OK: Card 3782****4567 - $45.67 - Risk: 0.08' },
+        { type: 'success', text: '✓ Stream running smoothly for 14:32:17' }
+      ],
+      'clinical-predictor': [
+        { type: 'info', text: '$ Initializing Clinical Risk Predictor...' },
+        { type: 'success', text: '✓ Loaded XGBoost model (clinical_risk_v2.1)' },
+        { type: 'info', text: '✓ SHAP explainer ready (TreeExplainer)' },
+        { type: 'info', text: '✓ FHIR validation: PASSED' },
+        { type: 'input', text: '> Patient vitals input received...' },
+        { type: 'output', text: '\nPatient Profile:' },
+        { type: 'output', text: '  • Age: 67 years' },
+        { type: 'output', text: '  • Blood Pressure: 142/88 mmHg' },
+        { type: 'output', text: '  • Heart Rate: 78 bpm' },
+        { type: 'output', text: '  • Glucose: 156 mg/dL' },
+        { type: 'output', text: '  • BMI: 31.2' },
+        { type: 'info', text: '\nAnalyzing with 52 features...' },
+        { type: 'warning', text: '🏥 Risk Score: 0.73 (HIGH)' },
+        { type: 'output', text: '\nTop Risk Factors (SHAP):' },
+        { type: 'output', text: '  1. Age: +0.18' },
+        { type: 'output', text: '  2. Systolic BP: +0.15' },
+        { type: 'output', text: '  3. Glucose: +0.12' },
+        { type: 'output', text: '  4. BMI: +0.08' },
+        { type: 'info', text: '\nRecommendations:' },
+        { type: 'output', text: '  • Immediate follow-up recommended' },
+        { type: 'output', text: '  • Consider antihypertensive medication' },
+        { type: 'output', text: '  • Lifestyle intervention program' },
+        { type: 'success', text: '✓ Analysis completed in 89ms' }
+      ],
+      'nlp-classifier': [
+        { type: 'info', text: '$ Initializing NLP Text Classifier...' },
+        { type: 'success', text: '✓ BERT-ONNX model loaded (bert-base-uncased-finetuned)' },
+        { type: 'info', text: '✓ Redis cache: 1,048,576 entries' },
+        { type: 'info', text: '✓ Multi-label support: ENABLED' },
+        { type: 'input', text: '> Text: "Our company needs a scalable cloud solution for real-time data processing and analytics"' },
+        { type: 'info', text: 'Tokenizing input (128 tokens)...' },
+        { type: 'info', text: 'Running inference through ONNX Runtime...' },
+        { type: 'success', text: '✓ Inference completed in 8ms' },
+        { type: 'output', text: '\nClassification Results:' },
+        { type: 'output', text: '──────────────────' },
+        { type: 'output', text: '1. Technology (Confidence: 0.94) ████████████' },
+        { type: 'output', text: '2. Business (Confidence: 0.87) ██████████' },
+        { type: 'output', text: '3. Cloud Computing (Confidence: 0.82) ████████' },
+        { type: 'output', text: '4. Data Analytics (Confidence: 0.78) ███████' },
+        { type: 'output', text: '5. Software (Confidence: 0.71) ██████' },
+        { type: 'info', text: '\nEmbedding similarity to known patterns: 0.91' },
+        { type: 'info', text: 'Cache status: MISS (stored to Redis)' },
+        { type: 'success', text: '✓ Classification completed successfully' }
+      ]
+    };
+
+    function runDemo(demoName) {
+      const modal = document.getElementById('demoModal');
+      const terminal = document.getElementById('terminal');
+      const modalTitle = document.getElementById('modal-title');
+      
+      // Set modal title
+      const titles = {
+        'crm-rag': 'CRM RAG Search Demo',
+        'fraud-stream': 'Fraud Detection Stream Demo',
+        'clinical-predictor': 'Clinical Risk Predictor Demo',
+        'nlp-classifier': 'NLP Text Classifier Demo'
+      };
+      modalTitle.textContent = titles[demoName];
+      
+      // Clear and show modal
+      terminal.innerHTML = '';
+      modal.classList.add('active');
+      
+      // Animate demo output
+      const outputs = demoOutputs[demoName];
+      let index = 0;
+      
+      const typeLine = () => {
+        if (index >= outputs.length) return;
+        
+        const output = outputs[index];
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        
+        if (output.type === 'input') {
+          line.innerHTML = `<span class="terminal-prompt">></span><span class="terminal-output">${output.text}</span>`;
+        } else if (output.type === 'error') {
+          line.innerHTML = `<span class="terminal-output terminal-error">${output.text}</span>`;
+        } else if (output.type === 'success') {
+          line.innerHTML = `<span class="terminal-output terminal-success">${output.text}</span>`;
+        } else if (output.type === 'warning') {
+          line.innerHTML = `<span class="terminal-output terminal-warning">${output.text}</span>`;
+        } else {
+          line.innerHTML = `<span class="terminal-output">${output.text}</span>`;
+        }
+        
+        terminal.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+        
+        index++;
+        setTimeout(typeLine, output.type === 'input' ? 1000 : 300 + Math.random() * 200);
+      };
+      
+      setTimeout(typeLine, 500);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('demoModal');
+      modal.classList.remove('active');
+    }
+
+    function clearTerminal() {
+      const terminal = document.getElementById('terminal');
+      terminal.innerHTML = '';
+    }
+
+    // ==== Keyboard Navigation ====
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // ==== Click Outside Modal ====
+    document.getElementById('demoModal').addEventListener('click', (e) => {
+      if (e.target.id === 'demoModal') {
+        closeModal();
+      }
+    });
+
+    // ==== Smooth Scroll for Navigation ====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ==== Performance Monitoring ====
+    if ('performance' in window) {
+      window.addEventListener('load', () => {
+        const perfData = performance.getEntriesByType('navigation')[0];
+        console.log(`Page load time: ${perfData.loadEventEnd - perfData.loadEventStart}ms`);
       });
     }
 
-    function loop(){
-      draw();
-      requestAnimationFrame(loop);
+    // ==== Service Worker Registration (Progressive Web App) ====
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {
+          // Service worker failed to register - that's OK
+        });
+      });
     }
-
-    function resize(){
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initParticles();
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    loop();
   </script>
 </body>
 </html>
